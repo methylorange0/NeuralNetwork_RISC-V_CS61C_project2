@@ -45,7 +45,7 @@ inner_loop_start:
     bge t1, a5, inner_loop_end
 
     #Push a0-6, t0-2
-    addi sp, sp, -40
+    addi sp, sp, -44
     sw a0, 0(sp)
     sw a1, 4(sp)
     sw a2, 8(sp)
@@ -56,6 +56,7 @@ inner_loop_start:
     sw t0, 28(sp)
     sw t1, 32(sp)
     sw t6, 36(sp)
+    sw ra, 40(sp)
 
     #Call dot
     add a1, x0, t6
@@ -75,7 +76,8 @@ inner_loop_start:
     lw t0, 28(sp)
     lw t1, 32(sp)
     lw t6, 36(sp)
-    addi sp, sp, 40
+    lw ra, 40(sp)
+    addi sp, sp, 44
 
     #Write value
     sw t3, 0(a6)
@@ -92,7 +94,7 @@ inner_loop_end:
     add t1, x0, x0
     addi t0, t0, 1
 
-    #pointers of m0, m1
+    #pointers to m0, m1
     add t6, x0, a3
     slli t5, a2, 2
     add a0, a0, t5

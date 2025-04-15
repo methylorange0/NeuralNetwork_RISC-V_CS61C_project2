@@ -216,11 +216,61 @@ class TestMatmul(TestCase):
         # generate the assembly file and run it through venus, we expect the simulation to exit with code `code`
         t.execute(code=code)
 
+    def do_matmul_error(self, m0, m0_rows, m0_cols, m1, m1_rows, m1_cols, flag, code=0):
+        t = AssemblyTest(self, "matmul.s")
+        # we need to include (aka import) the dot.s file since it is used by matmul.s
+        t.include("dot.s")
+
+        # create arrays for the arguments and to store the result
+        array0 = t.array(m0)
+        array1 = t.array(m1)
+        array_out = t.array([0] * m0_rows * m1_cols)
+
+        # load address of input matrices and set their dimensions
+        t.input_array("a0", array0)
+        t.input_scalar("a1", m0_rows)
+        t.input_scalar("a2", m0_cols)
+        t.input_array("a3", array1)
+        t.input_scalar("a4", m1_rows)
+        t.input_scalar("a5", m1_cols)
+        # load address of output array
+        t.input_array("a6", array_out)
+
+        # call the matmul function
+        t.call("matmul")
+
+        # check the content of the output array
+        t.check_scalar("a0", flag)
+
+        # generate the assembly file and run it through venus, we expect the simulation to exit with code `code`
+        t.execute(code=code)
+
     def test_simple(self):
         self.do_matmul(
             [1, 2, 3, 4, 5, 6, 7, 8, 9], 3, 3,
             [1, 2, 3, 4, 5, 6, 7, 8, 9], 3, 3,
             [30, 36, 42, 66, 81, 96, 102, 126, 150]
+        )
+
+    def test_m0_error(self):
+        self.do_matmul_error(
+            [], 0, 3,
+            [1, 2, 3, 4, 5, 6, 7, 8, 9], 3, 3,
+            72
+        )
+    
+    def test_m1_error(self):
+        self.do_matmul_error(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9], 3, 3,
+            [], 0, 3,
+            73
+        )
+    
+    def test_match_error(self):
+        self.do_matmul_error(
+            [1, 2, 3], 3, 1,
+            [1, 2, 3, 4, 5, 6, 7, 8, 9], 3, 3,
+            74
         )
 
     @classmethod
