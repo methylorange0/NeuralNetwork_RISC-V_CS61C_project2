@@ -111,6 +111,7 @@ classify:
     mv a6, s9
     jal matmul
 
+
     # 2. NONLINEAR LAYER: ReLU(m0 * input)
     lw t0, 0(s3)
     lw t1, 4(s7)
@@ -131,11 +132,12 @@ classify:
     mv a0, s6
     lw a1, 0(s5)
     lw a2, 4(s5)
-    mv a3, s8
-    lw a4, 0(s7)
+    mv a3, s9
+    lw a4, 0(s3)
     lw a5, 4(s7)
     mv a6, s10
     jal matmul
+
 
     # =====================================
     # WRITE OUTPUT
