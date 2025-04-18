@@ -27,4 +27,5 @@
 
 ## Here's what I did in project 2:
 Part A: Implemented ReLU, ArgMax, Dot Product, and Matrix Multiplication in RISC-V assembly language, and supplemented them with unittests
+
 Part B: Implemented matrix read and write operations using RISC-V assembly language. Combined the functions from Part A with pre-provided matrices to achieve handwritten digit recognition.
